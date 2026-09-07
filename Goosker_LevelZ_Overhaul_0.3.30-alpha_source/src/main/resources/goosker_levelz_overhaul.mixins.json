@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "package": "com.goosker.levelzoverhaul.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerStatsManagerMixin",
+    "PlayerEntityAgilityMiningMixin",
+    "HusbandryCropMixin",
+    "RightClickHarvestHusbandryMixin",
+    "ServerPlayerVitalityMixin",
+    "FrostbiteProjectileMixin",
+    "FrostSpikeProjectileMixin",
+    "FireboltProjectileMixin"
+  ],
+  "client": [
+    "SkillScreenMixin",
+    "SkillInfoScreenMixin",
+    "SkillButtonCompatMixin",
+    "MinecraftClientFlowCompatMixin",
+    "DrawTabHelperSoundMixin",
+    "RenderInitTabIconMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

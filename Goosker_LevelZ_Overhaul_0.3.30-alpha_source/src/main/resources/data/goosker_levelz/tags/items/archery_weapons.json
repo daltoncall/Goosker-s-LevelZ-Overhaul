@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:bow",
+    "minecraft:crossbow",
+    "mebahelcreaturesdraugr:bow/ancient_nord/ancient_nord_bow",
+    "mebahelcreaturesdraugr:bow/ebony_bow",
+    "mebahelcreaturesdraugr:bow/stalhrim_bow"
+  ]
+}

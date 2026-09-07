@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "goosker_levelz_overhaul",
+  "version": "0.3.30-alpha",
+  "name": "Goosker's LevelZ Overhaul",
+  "description": "Ten-skill LevelZ overhaul for Goosker's Medieval Modpack.",
+  "authors": [
+    "Goosker"
+  ],
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.goosker.levelzoverhaul.GooskerLevelZOverhaul"
+    ]
+  },
+  "mixins": [
+    "goosker_levelz_overhaul.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.3",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric-api": "*",
+    "levelz": "1.4.13",
+    "mebahelcreaturesdraugr": "1.8.3-fabric-1.20.1",
+    "mebahels-api": ">=1.0.18-fabric-1.20.1",
+    "rightclickharvest": "4.6.1+1.20.1"
+  },
+  "suggests": {
+    "flow": "2.2.0+1.20.1",
+    "satisfying_buttons": "1.1.2"
+  }
+}
