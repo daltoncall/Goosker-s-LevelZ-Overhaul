@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mebahelcreaturesdraugr:staff/dragon_priest_frost_bite_staff",
+    "mebahelcreaturesdraugr:staff/dragon_priest_frost_spike_staff",
+    "mebahelcreaturesdraugr:staff/flame_atronach_summoning_staff",
+    "mebahelcreaturesdwarven:weapon/dwemer/dwarven_sphere_summoning_staff",
+    "mebahelcreaturesdwarven:weapon/dwemer/dwarven_spider_summoning_staff"
+  ]
+}

@@ -1,0 +1,75 @@
+plugins {
+    id "fabric-loom" version "1.5.8"
+    id "maven-publish"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "https://maven.fabricmc.net/" }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    // This project intentionally uses Minecraft's intermediary class/method names
+    // (class_#### / method_####), matching the production jar and its remap=false mixins.
+    mappings "net.fabricmc:intermediary:${project.minecraft_version}"
+
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // LevelZ 1.4.13+1.20.1 (Modrinth project/version IDs).
+    modImplementation "maven.modrinth:EFtixeiF:gYSnmSW4"
+
+    // LevelZ UI dependency used directly by the source.
+    modImplementation "maven.modrinth:libz:1.0.3"
+
+    // Optional integration referenced directly at compile time.
+    modCompileOnly "maven.modrinth:satisfying-buttons:1.1.2"
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        // The checked-in file already contains the release version; keeping this
+        // replacement makes future version bumps straightforward.
+        filter { line -> line.replace('"version": "0.3.36-alpha"', '"version": "' + project.version + '"') }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+    options.encoding = "UTF-8"
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
+    from("CREDITS.md")
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            from components.java
+        }
+    }
+}
