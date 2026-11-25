@@ -81,8 +81,8 @@ public abstract class AbstractFurnaceBlockEntityMixin implements SmithingFurnace
     }
 
     /**
-     * Adds +3% of vanilla cooking XP per Smithing level for every cooking recipe that
-     * actually has vanilla recipe XP. At Smithing 50 this is +150% bonus XP (2.5x total).
+     * Adds +2% of vanilla cooking XP per Smithing level for every cooking recipe that
+     * actually has vanilla recipe XP. At Smithing 50 this is +100% bonus XP (2x total).
      * The bonus is granted directly to the player collecting output, not as shared XP orbs.
      */
     @Inject(method = "method_27354", at = @At("HEAD"), require = 1, remap = false)
@@ -93,11 +93,11 @@ public abstract class AbstractFurnaceBlockEntityMixin implements SmithingFurnace
             int smithing = SkillUtil.level(player, Skill.SMITHING);
             if (smithing > 0) {
                 class_1863 recipes = world.method_8433();
-                float bonusMultiplier = smithing * 0.03F;
+                float bonusMultiplier = com.goosker.levelzoverhaul.BalanceValues.xpBonus(smithing);
                 float bonusXp = 0.0F;
 
                 for (Object2IntMap.Entry<class_2960> entry : field_11986.object2IntEntrySet()) {
-                    Optional<class_1860<?>> optional = recipes.method_8130(entry.getKey());
+                    Optional<? extends class_1860<?>> optional = recipes.method_8130(entry.getKey());
                     if (optional.isEmpty() || !(optional.get() instanceof class_1874 cooking)) continue;
 
                     float xpPerItem = cooking.method_8171();

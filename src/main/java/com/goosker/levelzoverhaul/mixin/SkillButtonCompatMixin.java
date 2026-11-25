@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "net.levelz.screen.SkillScreen$WidgetButtonPage", remap = false)
 public abstract class SkillButtonCompatMixin {
     @Shadow @Final private boolean hoverOutline;
+    @Shadow @Final private boolean clickable;
     @Shadow @Final private int textureY;
     @Shadow private List<class_2561> tooltip;
 
@@ -31,7 +32,8 @@ public abstract class SkillButtonCompatMixin {
 
     @Inject(method = "method_48579", at = @At("RETURN"), remap = false)
     private void goosker$satisfyingButtonsCompat(class_332 context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        boolean hovered = CompatUtil.isActive(this) && CompatUtil.isHovered(this);
+        net.minecraft.class_339 widget = (net.minecraft.class_339) (Object) this;
+        boolean hovered = clickable && widget.field_22763 && widget.method_49606();
         CompatUtil.satisfyingHoverChanged(hovered, goosker$wasHovered);
         goosker$wasHovered = hovered;
     }

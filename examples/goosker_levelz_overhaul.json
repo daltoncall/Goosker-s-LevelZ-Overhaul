@@ -1,0 +1,6 @@
+{
+  "levelzXpBlockBlacklist": [
+    "minecraft:*sculk*",
+    "deeperdarker:*sculk*"
+  ]
+}

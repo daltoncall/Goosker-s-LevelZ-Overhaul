@@ -14,7 +14,11 @@
     "AbstractFurnaceBlockUseMixin",
     "AbstractFurnaceBlockEntityMixin",
     "FurnaceScreenHandlerAccess",
-    "WanderingTraderBarteringMixin"
+    "WanderingTraderBarteringMixin",
+    "HusbandryBreedingMixin",
+    "LevelzConfigInitMixin",
+    "MiningOreDropsMixin",
+    "BlockLevelzXpBlacklistMixin"
   ],
   "client": [
     "SkillScreenMixin",

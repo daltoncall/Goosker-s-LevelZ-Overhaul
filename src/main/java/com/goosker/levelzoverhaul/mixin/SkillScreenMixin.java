@@ -95,6 +95,8 @@ public abstract class SkillScreenMixin {
         // icon/+ widgets alive. The top summary is repainted at TAIL so nothing old can bleed through.
         context.method_25290(GOOSKER_MAIN_OVERLAY, x, y, 0.0F, 0.0F, 200, 215, 200, 215);
 
+        com.goosker.levelzoverhaul.SkillPanelFrame.draw(context, x, y, 200, 215);
+
         final int white = 0xF2F2F2;
         final int muted = 0xB8B8B8;
         Skill[] roster = goosker$tenSkillRoster();
@@ -285,12 +287,6 @@ public abstract class SkillScreenMixin {
         return false;
     }
 
-    @Inject(method = "method_25394", at = @At("TAIL"), remap = false)
-    private void goosker$inventoryTabHoverSound(class_332 context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        boolean hovered = goosker$isInventoryTab(mouseX, mouseY);
-        CompatUtil.satisfyingHoverChanged(hovered, goosker$inventoryTabHovered);
-        goosker$inventoryTabHovered = hovered;
-    }
 
     private boolean goosker$isInventoryTab(double mouseX, double mouseY) {
         // Matches LibZ DrawTabHelper's first (inventory) tab hitbox on SkillScreen.

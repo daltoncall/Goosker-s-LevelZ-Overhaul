@@ -41,7 +41,7 @@ public abstract class RightClickHarvestHusbandryMixin {
         for (class_1799 stack : drops) {
             if (!stack.method_31573(TagInit.FARM_ITEMS)) continue;
 
-            float exactExtra = husbandry * (5.5F / 50.0F);
+            float exactExtra = com.goosker.levelzoverhaul.BalanceValues.produceExtras(husbandry) * stack.method_7947();
             int extra = (int) Math.floor(exactExtra);
             float fraction = exactExtra - extra;
             if (world.field_9229.method_43057() < fraction) extra++;

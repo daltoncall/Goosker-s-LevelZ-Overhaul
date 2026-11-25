@@ -1,6 +1,8 @@
 package com.goosker.levelzoverhaul.mixin;
 
 import java.util.Locale;
+import com.goosker.levelzoverhaul.BreedingBonus;
+import net.minecraft.class_2561;
 import com.goosker.levelzoverhaul.CompatUtil;
 import com.goosker.levelzoverhaul.BonusIconTextures;
 import com.goosker.levelzoverhaul.SkillBonusLine;
@@ -57,6 +59,8 @@ public abstract class SkillInfoScreenMixin {
         context.method_25290(GOOSKER_BACKGROUND,
             x, y, 0.0F, 0.0F, backgroundWidth, backgroundHeight, 256, 256);
 
+        com.goosker.levelzoverhaul.SkillPanelFrame.draw(context, x, y, backgroundWidth, backgroundHeight);
+
         // Half-size version of the original Minecraft-style beveled back button.
         int backX = x + backgroundWidth - 20;
         int backY = y + 8;
@@ -98,6 +102,8 @@ public abstract class SkillInfoScreenMixin {
         goosker$draw(context, text, "Current Bonuses", x + 12, lineY, GOLD);
         lineY += 17;
 
+        String hoveredMax = null;
+        SkillBonusLine[] maximums = goosker$bonuses(skill, 50);
         int bonusIndex = 0;
         for (SkillBonusLine bonus : goosker$bonuses(skill, level)) {
             if (skill == Skill.SMITHING && bonusIndex == 1) {
@@ -116,6 +122,10 @@ public abstract class SkillInfoScreenMixin {
 
             int valueX = goosker$drawEnd(context, text, bonus.label, x + 34, lineY, WHITE);
             goosker$draw(context, text, bonus.value, valueX, lineY, bonus.valueColor);
+            if (mouseX >= valueX && mouseX < valueX + text.method_1727(bonus.value)
+                    && mouseY >= lineY - 2 && mouseY < lineY + 11) {
+                hoveredMax = "Max " + maximums[bonusIndex].value;
+            }
             lineY += 18;
             bonusIndex++;
         }
@@ -128,11 +138,10 @@ public abstract class SkillInfoScreenMixin {
         CompatUtil.satisfyingHoverChanged(backHovered, goosker$backHovered);
         goosker$backHovered = backHovered;
 
-        boolean inventoryHovered = goosker$isInventoryTab(mouseX, mouseY);
-        CompatUtil.satisfyingHoverChanged(inventoryHovered, goosker$inventoryTabHovered);
-        goosker$inventoryTabHovered = inventoryHovered;
-
         DrawTabHelper.drawTab(client, context, (class_437) (Object) this, x, y, mouseX, mouseY);
+        if (hoveredMax != null) {
+            context.method_51438(text, class_2561.method_30163(hoveredMax), mouseX, mouseY);
+        }
         ci.cancel();
     }
 
@@ -235,8 +244,7 @@ public abstract class SkillInfoScreenMixin {
                 "fall distance."
             };
             case DEFENSE -> new String[]{
-                "Increases armor and armor",
-                "toughness."
+                "Increases armor and toughness."
             };
             case ARCHERY -> new String[]{
                 "Increases bow and crossbow",
@@ -279,35 +287,35 @@ public abstract class SkillInfoScreenMixin {
             };
             case AGILITY -> new SkillBonusLine[]{
                 new SkillBonusLine("Movement Speed: ", "+" + goosker$percent(level * 0.4) + "%", 2, GREEN),
-                new SkillBonusLine("Exhaustion Used: ", "-" + goosker$percent(level * 0.8) + "%", 2, GREEN),
+                new SkillBonusLine("Exhaustion Used: ", "-" + goosker$percent(level * 2.0) + "%", 2, GREEN),
                 new SkillBonusLine("Safe Fall: ", "+" + goosker$one(level * (22.0 / 50.0)) + " blocks", 2, GREEN)
             };
             case DEFENSE -> new SkillBonusLine[]{
                 new SkillBonusLine("Armor: ", "+" + goosker$one(level * 0.1), 3, GREEN),
-                new SkillBonusLine("Armor Toughness: ", "+" + goosker$two(level * 0.08), 3, GREEN)
+                new SkillBonusLine("Toughness: ", "+" + goosker$one(level * 0.2), 3, GREEN)
             };
             case ARCHERY -> new SkillBonusLine[]{
                 new SkillBonusLine("Bow Damage: ", "+" + goosker$one(level * 0.1), 6, GREEN),
                 new SkillBonusLine("Crossbow Damage: ", "+" + goosker$one(level * 0.1), 6, GREEN)
             };
             case TRADE -> new SkillBonusLine[]{
-                new SkillBonusLine("Trade Discount: ", goosker$percent(level * 0.72) + "%", 7, GREEN),
+                new SkillBonusLine("Trade Discount: ", goosker$percent(level * 1.9) + "%", 7, GREEN),
                 new SkillBonusLine("Trade XP: ", "+" + goosker$percent(level * 4.0) + "%", 7, GREEN)
             };
             case SMITHING -> new SkillBonusLine[]{
                 new SkillBonusLine("Durability Saved: ", goosker$percent(level * 2.0) + "%", 8, GREEN),
                 new SkillBonusLine("Anvil XP Discount: ", goosker$percent(level * 1.0) + "%", 8, GREEN),
                 new SkillBonusLine("Fuel Consumption: ", "-" + goosker$percent(level * 1.0) + "%", 8, GREEN),
-                new SkillBonusLine("Smelting XP: ", goosker$percent(100.0 + level * 3.0) + "%", 8, GREEN)
+                new SkillBonusLine("Smelting XP: ", goosker$percent(100.0 + level * 2.0) + "%", 8, GREEN)
             };
             case MINING -> new SkillBonusLine[]{
                 new SkillBonusLine("Mining Speed: ", "+" + goosker$percent(level * 1.0) + "%", 9, GREEN),
-                new SkillBonusLine("Bonus Ore Chance: ", goosker$percent(level * 1.0) + "%", 9, GREEN)
+                new SkillBonusLine("Ore Drops: ", com.goosker.levelzoverhaul.BalanceValues.oreDisplay(level), 9, GREEN)
             };
             case FARMING -> new SkillBonusLine[]{
-                new SkillBonusLine("Avg. Bonus Produce: ", "+" + goosker$two(level * (5.5 / 50.0)), 10, GREEN),
-                new SkillBonusLine("Twin Chance: ", level >= 50 ? "100%" : "Locked until Lv. 50", 0, level >= 50 ? GREEN : MUTED),
-                new SkillBonusLine("Breeding XP: ", "2x", 11, GREEN)
+                new SkillBonusLine("Avg. Bonus Produce: ", goosker$percent(100.0 + level * 12.0) + "%", 10, GREEN),
+                new SkillBonusLine("Breed Twins: ", BreedingBonus.display(level), 0, GREEN),
+                new SkillBonusLine("Breeding XP: ", goosker$percent(100.0 + level * 2.0) + "%", 11, GREEN)
             };
             case ALCHEMY -> new SkillBonusLine[]{
                 new SkillBonusLine("Magic Damage: ", "+" + goosker$one(level * 0.1), 11, GREEN),

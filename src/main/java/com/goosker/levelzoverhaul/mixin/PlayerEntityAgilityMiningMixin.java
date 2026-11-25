@@ -3,6 +3,9 @@ package com.goosker.levelzoverhaul.mixin;
 import com.goosker.levelzoverhaul.SkillUtil;
 import net.levelz.stats.Skill;
 import net.minecraft.class_2680;
+import net.minecraft.class_1657;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "net.minecraft.class_1657", remap = false)
 public abstract class PlayerEntityAgilityMiningMixin {
+    @Unique private boolean goosker$damageExhaustion;
+
     @ModifyArg(
         method = "method_7322(F)V",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1702;method_7583(F)V", remap = false),
@@ -19,7 +24,15 @@ public abstract class PlayerEntityAgilityMiningMixin {
     )
     private float goosker$agilityExhaustion(float amount) {
         int agility = SkillUtil.level(this, Skill.AGILITY);
-        return amount * (1.0F - Math.min(0.40F, agility * 0.008F));
+        return goosker$damageExhaustion ? amount : amount * com.goosker.levelzoverhaul.BalanceValues.exhaustionFactor(agility);
+    }
+
+    @Redirect(method = "method_6074(Lnet/minecraft/class_1282;F)V", at = @At(value = "INVOKE",
+        target = "Lnet/minecraft/class_1657;method_7322(F)V"), remap = false)
+    private void goosker$preserveDamageExhaustion(class_1657 player, float amount) {
+        goosker$damageExhaustion = true;
+        try { player.method_7322(amount); }
+        finally { goosker$damageExhaustion = false; }
     }
 
     @ModifyVariable(method = "method_5747(FFLnet/minecraft/class_1282;)Z", at = @At("HEAD"), argsOnly = true, ordinal = 0, remap = false)

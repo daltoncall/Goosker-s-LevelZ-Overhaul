@@ -24,7 +24,7 @@ public abstract class WanderingTraderBarteringMixin {
         int bartering = SkillUtil.level(player, Skill.TRADE);
         for (class_1914 offer : trader.method_8264()) {
             int baseCost = offer.method_8246().method_7947();
-            int adjustment = -(int) (bartering * 0.0072D * baseCost);
+            int adjustment = -(int) (com.goosker.levelzoverhaul.BalanceValues.tradeDiscount(bartering) / 100.0D * baseCost);
             offer.method_19273(adjustment);
         }
     }

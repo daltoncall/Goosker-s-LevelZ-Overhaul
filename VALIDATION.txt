@@ -1,0 +1,14 @@
+0.3.39-alpha validation
+
+- Full source compiles to Java 17 bytecode (class version 61).
+- Config tests passed: defaults, exact IDs, wildcards, empty list, malformed JSON retention.
+- 16 actual Fabric server runtime checks passed with LevelZ 1.4.13.
+- The transformed Block.dropExperience method preserves normal XP for each vanilla sculk block and suppresses blue XP; diamond ore keeps both XP types when unlisted.
+- Editing the config to blacklist diamond ore blocks its blue XP and preserves normal XP; removing sculk restores its blue XP.
+- doTileDrops=false preserves the normal suppression of both XP types.
+- Test positions are air, confirming matching uses the originating block rather than looking up a removed block in the world.
+- Deeper and Darker 1.3.3-plus JAR inspected: all 51 sculk-named block loot-table IDs match the default deeperdarker:*sculk* pattern. Its sculk jaw uses Block.dropExperience; gloomy/infested sculk inherit the sculk behavior.
+- Deeper and Darker itself was not loaded in the runtime test. Tests used the actual Minecraft/LevelZ drop method and the inspected registry IDs.
+- Runtime fixture omitted unrelated Draugr and RightClickHarvest dependencies using a test-only Fabric dependency override. Release dependencies are unchanged.
+- All previous JAR entries are byte-identical except the initializer, version metadata, and mixin list; the new config and blacklist classes are added. No existing gameplay/UI class was replaced.
+- No full-modpack or graphical playtest performed.

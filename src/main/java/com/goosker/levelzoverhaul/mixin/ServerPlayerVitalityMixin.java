@@ -13,6 +13,6 @@ public abstract class ServerPlayerVitalityMixin {
     private void goosker$vitalityToughness(CallbackInfo ci) {
         int vitality = SkillUtil.level(this, Skill.DEFENSE);
         // EntityAttributes.GENERIC_ARMOR_TOUGHNESS = intermediary field_23725 in 1.20.1.
-        SkillUtil.setAttributeBase(this, "field_23725", vitality * 0.08D);
+        SkillUtil.setAttributeBase(this, "field_23725", com.goosker.levelzoverhaul.BalanceValues.toughness(vitality));
     }
 }

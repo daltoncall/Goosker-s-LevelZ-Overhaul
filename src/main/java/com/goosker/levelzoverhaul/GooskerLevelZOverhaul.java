@@ -10,6 +10,12 @@ public final class GooskerLevelZOverhaul implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        BlockXpConfig.load();
+        applyBonuses();
+    }
+
+    /** Also invoked after LevelZ installs its actual config instance. */
+    public static void applyBonuses() {
         LevelzConfig c = ConfigInit.CONFIG;
         if (c == null) return;
 
@@ -57,8 +63,8 @@ public final class GooskerLevelZOverhaul implements ModInitializer {
         c.archeryCrossbowExtraDamage = 0.1F;
         c.archeryDoubleDamageChance = 0.0F;
 
-        // TRADE -> Bartering: 36% discount at 50 and +200% trade XP (3x total).
-        c.tradeBonus = 0.72D;
+        // TRADE -> Bartering: 95% discount at 50 and +200% trade XP (3x total).
+        c.tradeBonus = 1.9D;
         c.tradeXPBonus = 0.04F;
         c.tradeReputation = true;
 
@@ -66,16 +72,16 @@ public final class GooskerLevelZOverhaul implements ModInitializer {
         c.smithingToolChance = 0.02F;
         c.smithingCostBonus = 0.01F;
 
-        // MINING -> Mining: 50% LevelZ bonus ore-drop chance at 50.
-        c.miningOreChance = 0.01F;
+        // MINING -> Mining: custom 1x -> 3x ore drops; no Fortune stacking.
+        c.miningOreChance = 0.0F;
         c.miningTntBonus = 0.0F;
         c.miningLockedMultiplicator = 0.0F;
 
-        // FARMING -> Husbandry: 100% extra tagged plant drop + 100% twin chance at 50.
+        // FARMING -> Husbandry: custom crop yield and progressive extra offspring.
         c.farmingBase = 1;
         c.farmingChanceBonus = 0.0F; // custom crop-yield scaling is addon-handled
-        c.farmingTwinChance = 1.0F; // LevelZ checks this at max Husbandry: guaranteed twin at 50
-        c.breedingXPMultiplier = 2.0F; // modestly reward breeding as a progression activity
+        c.farmingTwinChance = 0.0F; // disable native max-level twin; HusbandryBreedingMixin owns extras
+        c.breedingXPMultiplier = 0.0F; // custom level-scaled breeding XP in HusbandryBreedingMixin
 
         // ALCHEMY -> Magicka: native potion amplifier chance; magic damage is addon-handled.
         c.alchemyEnchantmentChance = 0.0F;

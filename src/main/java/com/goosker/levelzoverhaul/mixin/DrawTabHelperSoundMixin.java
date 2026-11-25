@@ -23,6 +23,40 @@ public abstract class DrawTabHelperSoundMixin {
         new class_2960("goosker_levelz_overhaul:textures/gui/tabs/inventory_closed.png");
 
 
+    private static final java.util.Map<class_437, net.libz.api.InventoryTab> GOOSKER_HOVERED_TABS =
+        new java.util.WeakHashMap<>();
+
+    @Inject(method = "drawTab", at = @At("RETURN"), remap = false)
+    private static void goosker$allTabHoverSounds(class_310 client, class_332 context,
+        class_437 screen, int x, int y, int mouseX, int mouseY, CallbackInfo ci) {
+        net.libz.api.InventoryTab hovered = null;
+        if (client != null && client.field_1724 != null && net.libz.init.ConfigInit.CONFIG.inventoryButton
+                && screen instanceof net.libz.api.Tab tabScreen) {
+            Class<?> parent = tabScreen.getParentScreenClass();
+            java.util.List<net.libz.api.InventoryTab> tabs = parent == null
+                ? net.libz.LibzClient.inventoryTabs : net.libz.LibzClient.otherTabs.get(parent);
+            int tabX = x;
+            if (tabs != null) for (net.libz.api.InventoryTab tab : tabs) {
+                if (!tab.shouldShow(client)) continue;
+                boolean selected = tab.isSelectedScreen(screen.getClass());
+                int top = selected ? y - 25 : y - 21;
+                int bottom = y;
+                if (!selected && tab.canClick(screen.getClass(), client)
+                        && mouseX >= tabX && mouseX < tabX + 24 && mouseY >= top && mouseY < bottom) {
+                    hovered = tab;
+                }
+                tabX += 25;
+            }
+        }
+        net.libz.api.InventoryTab previous = GOOSKER_HOVERED_TABS.get(screen);
+        if (previous != hovered) {
+            if (previous != null) CompatUtil.satisfyingHoverChanged(false, true);
+            if (hovered != null) CompatUtil.satisfyingHoverChanged(true, false);
+        }
+        if (hovered == null) GOOSKER_HOVERED_TABS.remove(screen);
+        else GOOSKER_HOVERED_TABS.put(screen, hovered);
+    }
+
     @ModifyVariable(method = "drawTab", at = @At("HEAD"), argsOnly = true, ordinal = 0, require = 1, remap = false)
     private static int goosker$shiftTabDrawX(int x) {
         return x + CompatUtil.tabXOffsetForCurrentScreen();
@@ -66,6 +100,14 @@ public abstract class DrawTabHelperSoundMixin {
             resolvedTexture = GOOSKER_INVENTORY_TAB_CLOSED;
         }
         context.method_25290(resolvedTexture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
+
+    @Redirect(method = "drawTab", at = @At(value = "INVOKE",
+        target = "Lnet/libz/api/InventoryTab;getTitle()Lnet/minecraft/class_2561;"),
+        require = 1, remap = false)
+    private static net.minecraft.class_2561 goosker$inventoryTitle(net.libz.api.InventoryTab tab) {
+        return tab instanceof net.levelz.screen.widget.VanillaInventoryTab
+            ? net.minecraft.class_2561.method_30163("Inventory") : tab.getTitle();
     }
 
     @Inject(

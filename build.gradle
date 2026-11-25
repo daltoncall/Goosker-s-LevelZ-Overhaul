@@ -44,7 +44,7 @@ processResources {
     filesMatching("fabric.mod.json") {
         // The checked-in file already contains the release version; keeping this
         // replacement makes future version bumps straightforward.
-        filter { line -> line.replace('"version": "0.3.36-alpha"', '"version": "' + project.version + '"') }
+        filter { line -> line.replace('"version": "0.3.39-alpha"', '"version": "' + project.version + '"') }
     }
 }
 
